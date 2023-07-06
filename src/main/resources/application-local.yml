@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL82Dialect
+        format_sql: true
+        use_sql_comments: true
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
+
+
+  datasource:
+    #    jndi-name: java:/zpfranchisedevDs
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:postgresql://postgre-db.cfh61qv9x1da.us-west-2.rds.amazonaws.com:5432/postgre_db
+    username: postgres
+    password: adminadmin01
+
+jwt:
+  base64:
+    secret: 'fsdfsdrSerTStWQrEWHGISfsadfsdqwreeWRTEWtWetTEWSyRYdYdruhS324523GFDRTDRGAWQerrerfsdfsdfsdgdsgsdftgsdgsdg32fdsFGsdfsDfSDF'
+
+
+logging:
+  level:
+    root: DEBUG
+    com:
+      zaxxer:
+        hikari: OFF
+    javax:
+      sql:
+        DataSource: OFF
+    jdbc:
+      audit: OFF
+      result: OFF
+
+      result-settable: INFO  #SQL 결과 데이터 Table을 로그로 남긴다.
+      sql only: OFF     #SQL만 로그로 남긴다.
+      sliding: INFO    #SQL과 소요시간을 표기한다.
+      connection : OFF  # 커넥션 확인가능
+    org:
+      hibernate:
+        SQL: OFF
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/**/**.xml
+
