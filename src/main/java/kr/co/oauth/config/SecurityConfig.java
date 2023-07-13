@@ -1,6 +1,7 @@
 package kr.co.oauth.config;
 
 import kr.co.oauth.config.auth.OAuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,9 +14,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @EnableWebSecurity
+@RequiredArgsConstructor //final 필드 생성자 만들어줌
 public class SecurityConfig {
 
-    private OAuthService oAuthService;
+    private final OAuthService oAuthService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

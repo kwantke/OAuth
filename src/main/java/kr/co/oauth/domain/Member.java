@@ -13,7 +13,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @Entity
 @Getter
-@Table(name = "Member")
+@Table(name = "Member2")
 public class Member {
 
     @Id
