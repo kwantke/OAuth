@@ -1,5 +1,6 @@
 package kr.co.oauth.config;
 
+import kr.co.oauth.config.auth.OAuth2SuccessHandler;
 import kr.co.oauth.config.auth.OAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final OAuthService oAuthService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,7 +35,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .oauth2Login()
-                //.successHandler(MyAuthentication)
+                .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
                 //OAuth 2.0 인증이 처리되는데 사용될 사용자 서비스를 지정하는 메서드
                 .userService(oAuthService)
