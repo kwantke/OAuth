@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     log.info("Principal에서 꺼낸 OAuth2User = {}", oAuth2User);
     //attributes.toString() 예시 : {id=2346930276, provider=kakao, name=김준우, email=bababoll@naver.com}
     Map<String, Object> attributes = oAuth2User.getAttributes();
-    String targetUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+    String targetUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:3000/auth/callback")
             .queryParam("token","token1")
             .build().toUriString();
     getRedirectStrategy().sendRedirect(request, response, targetUrl);
