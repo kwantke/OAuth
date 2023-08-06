@@ -1,7 +1,9 @@
-package kr.co.oauth.config.auth;
+package kr.co.oauth.config.oauth;
 
-import kr.co.oauth.domain.Member;
-import kr.co.oauth.repository.MemberRepository;
+import kr.co.oauth.domain.Member2;
+import kr.co.oauth.member.entity.Member;
+import kr.co.oauth.member.repository.MemberRepository;
+import kr.co.oauth.repository.MemberRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

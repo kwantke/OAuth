@@ -1,12 +1,14 @@
-package kr.co.oauth.config.auth;
+package kr.co.oauth.config.oauth;
 
-import kr.co.oauth.domain.Member;
+import kr.co.oauth.domain.Member2;
+import kr.co.oauth.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class MemberProfile {
+
     private String name;
     private String email;
     private String provider;
@@ -14,8 +16,8 @@ public class MemberProfile {
 
     public Member toMember() {
         return Member.builder()
-                .name(name)
                 .email(email)
+                .name(name)
                 .provider(provider)
                 .build();
     }

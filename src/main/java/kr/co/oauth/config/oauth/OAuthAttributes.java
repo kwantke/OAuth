@@ -1,4 +1,4 @@
-package kr.co.oauth.config.auth;
+package kr.co.oauth.config.oauth;
 
 import java.util.Arrays;
 import java.util.Map;

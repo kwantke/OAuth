@@ -1,13 +1,15 @@
-package kr.co.oauth.config;
+package kr.co.oauth.config.security;
 
-import kr.co.oauth.config.auth.OAuth2SuccessHandler;
-import kr.co.oauth.config.auth.OAuthService;
+import kr.co.oauth.config.jwt.JwtAuthenticationFilter;
+import kr.co.oauth.config.oauth.OAuthSuccessHandler;
+import kr.co.oauth.config.oauth.OAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,7 +21,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private final OAuthService oAuthService;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuthSuccessHandler oAuth2SuccessHandler;
+
+    private final JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,6 +45,9 @@ public class SecurityConfig {
                 .userService(oAuthService)
                 .and();
 
+                http.cors().configurationSource(corsConfigurationSource());
+
+                http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
     }
 
