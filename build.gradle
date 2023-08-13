@@ -48,6 +48,9 @@ dependencies {
     // POSTGRES SQL
     runtimeOnly 'org.postgresql:postgresql'
 
+    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
