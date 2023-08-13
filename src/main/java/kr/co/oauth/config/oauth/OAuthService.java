@@ -1,5 +1,6 @@
 package kr.co.oauth.config.oauth;
 
+import kr.co.oauth.config.jwt.JwtUtil;
 import kr.co.oauth.domain.Member2;
 import kr.co.oauth.member.entity.Member;
 import kr.co.oauth.member.repository.MemberRepository;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
 
     //loadUser 메서드 설명
     // Spring Security가 access token을 이용해서 OAuth2 Service에서 유저 정보를 가져온 다음 loadUser 메서드를 통해 유저 정보를 가져옴
@@ -52,6 +54,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes);
         memberProfile.setProvider(registrationId);
+        memberProfile.setAccessToken(jwtUtil.createToken(memberProfile.getEmail(), "Access"));
+        memberProfile.setRefreshToken(jwtUtil.createToken(memberProfile.getEmail(), "Refresh"));
         Member member = saveOrUpdate(memberProfile);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberProfile, registrationId);
@@ -67,13 +71,15 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         customAttribute.put("provider", registrationId);
         customAttribute.put("name", memberProfile.getName());
         customAttribute.put("email", memberProfile.getEmail());
+        customAttribute.put("accessToken", memberProfile.getAccessToken());
+        customAttribute.put("refreshToken", memberProfile.getRefreshToken());
         return customAttribute;
     }
 
     private Member saveOrUpdate(MemberProfile memberProfile) {
         Member member = memberRepository.findByEmailAndProvider(memberProfile.getEmail(),
                 memberProfile.getProvider())
-                .map(m-> m.update(memberProfile.getName(), memberProfile.getEmail()))
+                .map(m-> m.update(memberProfile.getName(), memberProfile.getEmail(), memberProfile.getRefreshToken()))
                 .orElse(memberProfile.toMember());
         return memberRepository.save(member);
     }
