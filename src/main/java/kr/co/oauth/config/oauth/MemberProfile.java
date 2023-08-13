@@ -13,12 +13,14 @@ public class MemberProfile {
     private String email;
     private String provider;
     private String nickname;
-
+    private String accessToken;
+    private String refreshToken;
     public Member toMember() {
         return Member.builder()
                 .email(email)
                 .name(name)
                 .provider(provider)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
