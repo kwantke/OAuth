@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.DispatcherType;
 import java.util.List;
 
 @EnableWebSecurity
@@ -27,25 +28,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                .cors()
-                .and()
-                .csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .oauth2Login()
-                .successHandler(oAuth2SuccessHandler)
-                .userInfoEndpoint()
-                //OAuth 2.0 인증이 처리되는데 사용될 사용자 서비스를 지정하는 메서드
-                .userService(oAuthService)
-                .and();
 
-                http.cors().configurationSource(corsConfigurationSource());
+        http.csrf().disable()
+            .httpBasic().disable()
+            .formLogin().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //cors 설정
+        http.cors().configurationSource(corsConfigurationSource());
+
+        http.authorizeRequests()
+            .antMatchers("/user/**").permitAll()
+                .antMatchers("/oauth2/authorization/*").permitAll()
+                .antMatchers("/health-check").permitAll()
+                .anyRequest().authenticated();
+
+        http.oauth2Login()
+            .successHandler(oAuth2SuccessHandler)
+            .userInfoEndpoint()
+            //OAuth 2.0 인증이 처리되는데 사용될 사용자 서비스를 지정하는 메서드
+            .userService(oAuthService);
 
                 http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
@@ -65,3 +66,21 @@ public class SecurityConfig {
     }
 
 }
+/*http
+                .cors()
+                .and()
+                .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .oauth2Login()
+                .successHandler(oAuth2SuccessHandler)
+                .userInfoEndpoint()
+                //OAuth 2.0 인증이 처리되는데 사용될 사용자 서비스를 지정하는 메서드
+                .userService(oAuthService)
+                .and();
+*/

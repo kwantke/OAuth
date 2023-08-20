@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "Member2")
-public class Member {
+public class Member2 {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Member {
 
 
     @Builder
-    public Member(Long id, String name, String email, String provider, String nickname){
+    public Member2(Long id, String name, String email, String provider, String nickname){
 
         this.id = id;
         this.name = name;
@@ -44,7 +44,7 @@ public class Member {
         this.nickname = nickname;
     }
 
-    public Member update(String name, String email){
+    public Member2 update(String name, String email){
         this.name = name;
         this.email = email;
         return this;

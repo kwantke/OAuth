@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class MemberController {
 
