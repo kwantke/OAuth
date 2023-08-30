@@ -20,6 +20,8 @@ public class Member extends Timestamped {
 
   @Column(name= "email", nullable=false)
   private String email;
+
+  @Column(nullable = false)
   private String password;
 
   private String name;
@@ -27,16 +29,18 @@ public class Member extends Timestamped {
   private String myImgUrl;
   private String provider;
 
+  private Boolean isDeleted; // 탈퇴 여부
   private String refreshToken;
 
   @Builder
-  public Member(String email, String password,String name, String nickname, String myImgUrl, String provider, String refreshToken) {
+  public Member(String email, String password,String name, String nickname, String myImgUrl, String provider, Boolean isDeleted, String refreshToken) {
     this.email = email;
     this.password = password;
     this.name = name;
     this.nickname = nickname;
     this.myImgUrl = myImgUrl;
     this.provider = provider;
+    this.isDeleted = isDeleted;
     this.refreshToken = refreshToken;
   }
 

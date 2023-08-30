@@ -1,4 +1,4 @@
-package kr.co.oauth.member.dto;
+package kr.co.oauth.member.dto.requestDto;
 
 import lombok.Getter;
 
