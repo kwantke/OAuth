@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCodeEnum {
 
   UPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임 입니다."),
-  DUPLICATE_IDENTIFIER(HttpStatus.BAD_REQUEST, "ERROR_00001", "중복된 아이디 입니다.");
+  DUPLICATE_IDENTIFIER(HttpStatus.BAD_REQUEST, "ERROR_00001", "중복된 아이디 입니다."),
+  ID_NOT_FOUND(HttpStatus.NOT_FOUND,"ERROR_00002","등록되지 않은 아이디 입니다."),
+  INVALID_PASSWORD(HttpStatus.BAD_REQUEST,"ERROR_00003","잘못된 비밀번호 입니다.");
   private final HttpStatus httpStatus;
   private final String errorCode;
   private String message;
