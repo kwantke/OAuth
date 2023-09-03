@@ -20,10 +20,8 @@ public class Member extends Timestamped {
 
   @Column(name= "email", nullable=false)
   private String email;
-
   @Column(nullable = false)
   private String password;
-
   private String name;
   private String nickname;
   private String myImgUrl;
@@ -47,6 +45,11 @@ public class Member extends Timestamped {
   public Member update(String name, String email, String refreshToken) {
     this.name = name;
     this.email = email;
+    this.refreshToken = refreshToken;
+    return this;
+  }
+
+  public Member updateRefreshToken(String refreshToken) {
     this.refreshToken = refreshToken;
     return this;
   }

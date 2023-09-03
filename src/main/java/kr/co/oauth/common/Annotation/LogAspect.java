@@ -2,6 +2,7 @@ package kr.co.oauth.common.Annotation;
 
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ public class LogAspect {
   Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
 
+  @Around("@annotation(LogExecutionTime)")
   public Object logExecutioTime(ProceedingJoinPoint joinPoint) throws Throwable {
 
     StopWatch stopWatch = new StopWatch();

@@ -30,8 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    String access_token = jwtUtil.resolveToken(request, JwtUtil.ACCESS_KEY);
-    String refresh_token = jwtUtil.resolveToken(request, JwtUtil.REFRESH_KEY);
+    String access_token = jwtUtil.resolveToken(request, JwtUtil.ACCESS_TOKEN);
+    String refresh_token = jwtUtil.resolveToken(request, JwtUtil.REFRESH_TOKEN);
 
     if(access_token == null) {
       filterChain.doFilter(request, response);
@@ -45,10 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           jwtUtil.setCookieAccessToken(response, newAccessToken);
           setAuthentication(email);
       } else if(refresh_token == null) {
-        jwtExceptionHandler(response, "AccessToken Expired.",HttpStatus.BAD_REQUEST.value());
+        jwtExceptionHandler(response, "AccessToken Expired.",HttpStatus.UNAUTHORIZED.value());
         return;
       } else {
-        jwtExceptionHandler(response, "RefreshToken Expired.", HttpStatus.BAD_REQUEST.value());
+        jwtExceptionHandler(response, "RefreshToken Expired.", HttpStatus.UNAUTHORIZED.value());
         return;
       }
       filterChain.doFilter(request, response);

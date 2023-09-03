@@ -1,5 +1,8 @@
 package kr.co.oauth.config.jwt;
 
+import lombok.Getter;
+
+@Getter
 public class TokenDto {
 
   private String accessToken;

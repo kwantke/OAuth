@@ -37,7 +37,7 @@ public class ExceptionAdvisor {
       sb.append(fieldError.getDefaultMessage());
       sb.append(", ");
     }
-
+    log.error("ErrorMessage::::"+ sb.toString());
     return ErrorResponse.toResponseEntityValid(sb.toString(), HttpStatus.BAD_REQUEST);
 
   }

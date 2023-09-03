@@ -20,27 +20,26 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
 @RequiredArgsConstructor //@Autowired를 대신하여 사용합다.
 public class MemberController {
 
   private final MemberService memberService;
 
-  @PostMapping("/login")
+  @PostMapping("/users/login")
   @LogExecutionTime
   public ResponseEntity<Message> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-    return null;
+    return memberService.login(loginRequestDto,response);
   }
 
 
-  @PostMapping("/signup")
+  @PostMapping("/users/signup")
   @LogExecutionTime
   public ResponseEntity<Message> signUp(@Valid @RequestBody SignupRequestDto signupRequestDto) {
     return memberService.signup(signupRequestDto);
   }
 
   //일반 회원가입 아이디 중북 검사
-  @PostMapping("/checkId")
+  @PostMapping("/users/checkId")
   @LogExecutionTime
   public ResponseEntity<Message> checkId(@Valid @RequestBody CheckIdRequestDto checkIdRequestDto) {
 

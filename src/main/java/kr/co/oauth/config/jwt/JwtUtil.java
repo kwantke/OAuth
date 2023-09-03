@@ -32,8 +32,8 @@ import java.util.Optional;
 public class JwtUtil {
 
   private static final String BEARER_PREFIX = "Bearer";
-  public static final String ACCESS_KEY = "ACCESS_KEY";
-  public static final String REFRESH_KEY = "REFRESH_KEY";
+  public static final String ACCESS_TOKEN = "accessToken";
+  public static final String REFRESH_TOKEN = "refreshToken";
 
   private static final long ACCESS_TIME = Duration.ofMinutes(60).toMillis();
   private static final long REFRESH_TIME = Duration.ofDays(14).toMillis();
@@ -74,12 +74,13 @@ public class JwtUtil {
   //header 토근 가져오기
   public String resolveToken(HttpServletRequest request, String token) {
 
-    if(token.equals("REFRESH_KEY")){
+    if(token.equals("refreshToken")){
 
     } else {
-      String bearerToken = request.getHeader("ACCESS_KEY");
+      String bearerToken = request.getHeader("accessToken");
       if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-        return bearerToken.substring(7);
+        return bearerToken.substring(6);
+        //return bearerToken;
       }
     }
     return  null;
@@ -122,6 +123,6 @@ public class JwtUtil {
 
   // 쿠키에 access 토큰 추가
   public void setCookieAccessToken(HttpServletResponse response, String accessToken) {
-    response.setHeader(ACCESS_KEY, accessToken);
+    response.setHeader(ACCESS_TOKEN, accessToken);
   }
 }
