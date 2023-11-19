@@ -1,8 +1,8 @@
 package kr.co.oauth.config.security.auth;
 
 
-import kr.co.oauth.member.entity.Member;
-import kr.co.oauth.member.repository.MemberRepository;
+import kr.co.oauth.user.entity.User;
+import kr.co.oauth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final MemberRepository memberRepository;
+  private final UserRepository userRepository;
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    Member member = memberRepository.findByEmail(email)
+    User user = userRepository.findByEmail(email)
             .orElseThrow(()->new UsernameNotFoundException("사용자를 찾을수 없습니다."));
-    return new UserDetailsImpl(member, member.getEmail());
+    return new UserDetailsImpl(user, user.getEmail());
   }
 }

@@ -2,10 +2,9 @@ package kr.co.oauth.config.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.netty.util.internal.StringUtil;
 import kr.co.oauth.config.security.auth.UserDetailsServiceImpl;
-import kr.co.oauth.member.entity.Member;
-import kr.co.oauth.member.repository.MemberRepository;
+import kr.co.oauth.user.entity.User;
+import kr.co.oauth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +37,7 @@ public class JwtUtil {
   private static final long ACCESS_TIME = Duration.ofMinutes(60).toMillis();
   private static final long REFRESH_TIME = Duration.ofDays(14).toMillis();
 
-  private final MemberRepository memberRepository;
+  private final UserRepository userRepository;
 
   @Value("${jwt.secret.key}")
   private String secretKey;
@@ -105,6 +104,7 @@ public class JwtUtil {
 
   // 토큰에서 사용자 정보 가져오기
   public String getUserInfoFromToken(String token) {
+    Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
   }
 
@@ -117,7 +117,7 @@ public class JwtUtil {
   // refresh 토큰 검증
   public boolean refreshTokenValid(String token) {
     if(!validateToken(token)) return false;
-    Optional<Member> member = memberRepository.findByEmail(getUserInfoFromToken(token));
+    Optional<User> member = userRepository.findByEmail(getUserInfoFromToken(token));
     return member.isPresent() && token.equals(member.get().getRefreshToken());
   }
 

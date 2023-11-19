@@ -1,10 +1,13 @@
 package kr.co.oauth.config.oauth;
 
+import kr.co.oauth.common.exception.CustomException;
+import kr.co.oauth.common.exception.ErrorCodeEnum;
 import kr.co.oauth.config.jwt.JwtUtil;
-import kr.co.oauth.domain.Member2;
-import kr.co.oauth.member.entity.Member;
-import kr.co.oauth.member.repository.MemberRepository;
-import kr.co.oauth.repository.MemberRepository2;
+import kr.co.oauth.user.entity.ERole;
+import kr.co.oauth.user.entity.Role;
+import kr.co.oauth.user.entity.User;
+import kr.co.oauth.user.repository.RoleRepository;
+import kr.co.oauth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -15,9 +18,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /*
     OAuth2 로그인 성공시 DB에 저장하는 작업
@@ -26,7 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final JwtUtil jwtUtil;
 
     //loadUser 메서드 설명
@@ -50,13 +52,20 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         //Oauth 로그인 시 키(pk)가 되는 값
         //Oauth 서비스의 유저 정보들
         Map<String, Object> attributes = oAuth2User.getAttributes();
+        Role role = new Role();
+        Set<Role> roles = new HashSet<>();
+
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.ROLE_NOT_FOUND));
+        roles.add(userRole);
 
         // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes);
         memberProfile.setProvider(registrationId);
+        memberProfile.setRoles(roles);
         memberProfile.setAccessToken(jwtUtil.createToken(memberProfile.getEmail(), "Access"));
         memberProfile.setRefreshToken(jwtUtil.createToken(memberProfile.getEmail(), "Refresh"));
-        Member member = saveOrUpdate(memberProfile);
+        User user = saveOrUpdate(memberProfile);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberProfile, registrationId);
 
@@ -76,11 +85,11 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         return customAttribute;
     }
 
-    private Member saveOrUpdate(MemberProfile memberProfile) {
-        Member member = memberRepository.findByEmailAndProvider(memberProfile.getEmail(),
+    private User saveOrUpdate(MemberProfile memberProfile) {
+        User user = userRepository.findByEmailAndProvider(memberProfile.getEmail(),
                 memberProfile.getProvider())
                 .map(m-> m.update(memberProfile.getName(), memberProfile.getEmail(), memberProfile.getRefreshToken()))
                 .orElse(memberProfile.toMember());
-        return memberRepository.save(member);
+        return userRepository.save(user);
     }
 }

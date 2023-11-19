@@ -1,6 +1,6 @@
 package kr.co.oauth.config.security.auth;
 
-import kr.co.oauth.member.entity.Member;
+import kr.co.oauth.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,15 +8,15 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
-  private final Member member;
+  private final User user;
   private final String email;
 
-  public UserDetailsImpl(Member member, String email){
-    this.member = member;
+  public UserDetailsImpl(User user, String email){
+    this.user = user;
     this.email = email;
   }
 
-  public Member getMember() { return member;}
+  public User getMember() { return user;}
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return null;

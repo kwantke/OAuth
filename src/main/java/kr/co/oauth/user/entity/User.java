@@ -1,18 +1,22 @@
-package kr.co.oauth.member.entity;
+package kr.co.oauth.user.entity;
 
 import kr.co.oauth.common.entity.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "Member3")
-public class Member extends Timestamped {
+@Table(name = "USERS",
+       uniqueConstraints = {
+          @UniqueConstraint(columnNames = "email")
+       })
+public class User extends Timestamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +24,15 @@ public class Member extends Timestamped {
 
   @Column(name= "email", nullable=false)
   private String email;
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String password;
   private String name;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "USER_ROLE",
+             joinColumns = @JoinColumn(name = "user_id"),
+             inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles = new HashSet<>();
   private String nickname;
   private String myImgUrl;
   private String provider;
@@ -31,10 +41,11 @@ public class Member extends Timestamped {
   private String refreshToken;
 
   @Builder
-  public Member(String email, String password,String name, String nickname, String myImgUrl, String provider, Boolean isDeleted, String refreshToken) {
+  public User(String email, String password, String name, Set<Role> roles, String nickname, String myImgUrl, String provider, Boolean isDeleted, String refreshToken) {
     this.email = email;
     this.password = password;
     this.name = name;
+    this.roles = roles;
     this.nickname = nickname;
     this.myImgUrl = myImgUrl;
     this.provider = provider;
@@ -42,14 +53,14 @@ public class Member extends Timestamped {
     this.refreshToken = refreshToken;
   }
 
-  public Member update(String name, String email, String refreshToken) {
+  public User update(String name, String email, String refreshToken) {
     this.name = name;
     this.email = email;
     this.refreshToken = refreshToken;
     return this;
   }
 
-  public Member updateRefreshToken(String refreshToken) {
+  public User updateRefreshToken(String refreshToken) {
     this.refreshToken = refreshToken;
     return this;
   }

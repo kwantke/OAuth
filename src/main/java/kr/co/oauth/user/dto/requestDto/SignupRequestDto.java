@@ -1,11 +1,10 @@
-package kr.co.oauth.member.dto.requestDto;
+package kr.co.oauth.user.dto.requestDto;
 
-import kr.co.oauth.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,7 +16,10 @@ public class SignupRequestDto {
   @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z\\d!@#$%^&*()_-]{5,12}$", message = "비밀번호는 5~12자 이내 영어(소문자),숫자,특수기호(선택) 범위에서 입력해야합니다.")
   private String password;
 
-  private String nickname;
+  private String name;
 
+  private Set<String> role;
+
+  private String nickname;
 
 }

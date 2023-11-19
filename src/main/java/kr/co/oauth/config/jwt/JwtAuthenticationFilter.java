@@ -1,9 +1,8 @@
 package kr.co.oauth.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwt;
-import kr.co.oauth.member.entity.Member;
-import kr.co.oauth.member.repository.MemberRepository;
+import kr.co.oauth.user.entity.User;
+import kr.co.oauth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtil jwtUtil;
 
-  private final MemberRepository memberRepository;
+  private final UserRepository userRepository;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         setAuthentication(jwtUtil.getUserInfoFromToken(access_token));
       } else if(refresh_token != null && jwtUtil.refreshTokenValid(refresh_token)) {
           String email = jwtUtil.getUserInfoFromToken(refresh_token);
-          Member member = memberRepository.findByEmail(email).orElseThrow();
+          User user = userRepository.findByEmail(email).orElseThrow();
           String newAccessToken = jwtUtil.createToken(email, "Access");
           jwtUtil.setCookieAccessToken(response, newAccessToken);
           setAuthentication(email);
