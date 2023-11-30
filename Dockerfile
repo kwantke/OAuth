@@ -20,7 +20,6 @@ COPY --from=builder /build/build/libs/oauth-0.0.1-SNAPSHOT.jar .
 EXPOSE 9090
 
 # root 대신 nobody 권한으로 실행
-USER kevin
 ENTRYPOINT ["java","-jar","-Dspring.profiles.active=dev","oauth-0.0.1-SNAPSHOT.jar"]
 #ENTRYPOINT [   "java",   "-jar",   "-Djava.security.egd=file:/dev/./urandom",   "-Dsun.net.inetaddr.ttl=0",   "oauth-0.0.1-SNAPSHOT.jar"]
 

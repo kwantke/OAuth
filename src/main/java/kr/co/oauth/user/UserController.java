@@ -3,12 +3,14 @@ package kr.co.oauth.user;
 
 import kr.co.oauth.common.Annotation.LogExecutionTime;
 import kr.co.oauth.common.util.Message;
+import kr.co.oauth.common.util.StatusEnum;
 import kr.co.oauth.user.dto.requestDto.CheckIdRequestDto;
 import kr.co.oauth.user.dto.requestDto.LoginRequestDto;
 import kr.co.oauth.user.dto.requestDto.SignupRequestDto;
 import kr.co.oauth.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +46,16 @@ public class UserController {
     return userService.checkId(checkIdRequestDto);
   }
 
+  @PostMapping("/")
+  @LogExecutionTime
+  public ResponseEntity<Message> test() {
 
+    Message message;
+    String useYn="Y";
+
+
+    message = Message.setSuccess(StatusEnum.OK, useYn);
+    return new ResponseEntity<>(message, HttpStatus.OK);
+  }
 
 }
